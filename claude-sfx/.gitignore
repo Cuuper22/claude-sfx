@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+sounds/*.wav
+!sounds/.gitkeep

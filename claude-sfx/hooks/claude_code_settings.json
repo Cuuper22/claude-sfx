@@ -1,0 +1,45 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "tool === 'Bash' && toolInput.command && exitCode !== 0",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sfx; sfx.faah()\""
+          }
+        ]
+      },
+      {
+        "matcher": "tool === 'Bash' && exitCode === 0",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sfx; sfx.yay()\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "tool === 'AskUserQuestion'",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sfx; sfx.ding()\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sfx; sfx.ding()\""
+          }
+        ]
+      }
+    ]
+  }
+}

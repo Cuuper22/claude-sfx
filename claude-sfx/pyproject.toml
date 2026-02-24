@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "claude-sfx"
+version = "0.1.0"
+description = "meme sound effects for CLI sessions — faah on errors, ding on prompts, yay on success"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "contributors"}]
+keywords = ["cli", "sound-effects", "meme", "claude-code", "developer-experience"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Software Development :: User Interfaces",
+]
+
+[project.scripts]
+claude-sfx = "sfx.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sfx*"]
