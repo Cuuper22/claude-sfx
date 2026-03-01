@@ -88,3 +88,8 @@ def get_sound_for_event(event: str) -> str | None:
     if custom and os.path.isfile(custom):
         return custom
     return cfg.get("events", {}).get(event)
+
+
+def get_settings() -> dict:
+    """Get current settings (alias for load_config)."""
+    return load_config()

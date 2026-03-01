@@ -7,6 +7,7 @@ nothing but the stdlib `wave` + `struct` modules.
 
 import math
 import os
+import random
 import struct
 import wave
 
@@ -23,6 +24,16 @@ def _ensure_dir():
 def _write_wav(filename: str, samples: list[int], sample_rate: int = SAMPLE_RATE):
     """Write raw 16-bit mono PCM samples to a .wav file."""
     _ensure_dir()
+
+    # Apply volume scaling from config
+    try:
+        from sfx.config import get_settings
+        volume = get_settings().get("volume", 0.8)
+        samples = [int(s * volume) for s in samples]
+    except (ImportError, Exception):
+        # Fallback if config isn't available during generation
+        pass
+
     path = os.path.join(SOUNDS_DIR, filename)
     with wave.open(path, "w") as wf:
         wf.setnchannels(1)
@@ -206,7 +217,6 @@ def _gen_whoosh() -> str:
     n = int(SAMPLE_RATE * duration)
     samples = []
 
-    import random
     rng = random.Random(42)  # deterministic noise
 
     # simple noise buffer
