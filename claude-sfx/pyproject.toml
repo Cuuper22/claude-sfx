@@ -1,26 +1,78 @@
 [build-system]
-requires = ["setuptools>=68.0"]
-build-backend = "setuptools.backends._legacy:_Backend"
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "claude-sfx"
 version = "0.1.0"
-description = "meme sound effects for CLI sessions — faah on errors, ding on prompts, yay on success"
+description = "Meme sound effects for CLI sessions — FAAH on errors, ding on prompts, yay on success"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-authors = [{name = "contributors"}]
-keywords = ["cli", "sound-effects", "meme", "claude-code", "developer-experience"]
+authors = [{name = "Cuuper22", email = "cuuper225@gmail.com"}]
+maintainers = [{name = "Cuuper22", email = "cuuper225@gmail.com"}]
+keywords = ["cli", "sound-effects", "terminal", "audio", "claude-code", "developer-experience", "productivity"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Multimedia :: Sound/Audio",
     "Topic :: Software Development :: User Interfaces",
+    "Topic :: System :: Shells",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/Cuuper22/Osint_app"
+Repository = "https://github.com/Cuuper22/Osint_app"
+Issues = "https://github.com/Cuuper22/Osint_app/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.8.0",
 ]
 
 [project.scripts]
 claude-sfx = "sfx.cli:main"
 
+[tool.setuptools]
+package-dir = {"" = "."}
+
 [tool.setuptools.packages.find]
+where = ["."]
 include = ["sfx*"]
+exclude = ["tests*", "hooks*"]
+
+[tool.setuptools.package-data]
+sfx = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=sfx --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true

@@ -1,0 +1,5 @@
+# claude-sfx has zero runtime dependencies (stdlib only)
+# Development dependencies:
+pytest>=8.0.0
+pytest-cov>=4.1.0
+mypy>=1.8.0

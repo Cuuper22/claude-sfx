@@ -9,6 +9,7 @@ Tries platform-native commands in order:
 Falls back to printing a bell character (\\a) if nothing works.
 """
 
+from typing import List, Optional
 import os
 import platform
 import shutil
@@ -17,8 +18,13 @@ import sys
 import threading
 
 
-def _find_player() -> list[str] | None:
-    """Detect the best available audio player command."""
+def _find_player() -> Optional[List[str]]:
+    """
+    Detect the best available audio player command for the current platform.
+
+    Returns:
+        List of command parts to execute, or None if no player found.
+    """
     system = platform.system()
 
     if system == "Darwin":
@@ -41,11 +47,17 @@ def _find_player() -> list[str] | None:
     return None
 
 
-_PLAYER_CMD: list[str] | None = None
+_PLAYER_CMD: Optional[List[str]] = None
 _PLAYER_RESOLVED = False
 
 
-def _get_player() -> list[str] | None:
+def _get_player() -> Optional[List[str]]:
+    """
+    Get the cached audio player command, detecting it if necessary.
+
+    Returns:
+        List of command parts, or None if no player available.
+    """
     global _PLAYER_CMD, _PLAYER_RESOLVED
     if not _PLAYER_RESOLVED:
         _PLAYER_CMD = _find_player()
@@ -55,10 +67,15 @@ def _get_player() -> list[str] | None:
 
 def play_file(filepath: str, blocking: bool = False) -> bool:
     """
-    Play a .wav file. Returns True if playback started successfully.
+    Play a .wav file using the platform's native audio player.
 
-    blocking=False (default) plays in a background thread so it
-    never stalls the CLI.
+    Args:
+        filepath: Path to the .wav file to play.
+        blocking: If False (default), plays in a background thread.
+                  If True, blocks until playback completes.
+
+    Returns:
+        True if playback started successfully, False otherwise.
     """
     if not os.path.isfile(filepath):
         return False
@@ -70,7 +87,7 @@ def play_file(filepath: str, blocking: bool = False) -> bool:
         sys.stdout.flush()
         return False
 
-    def _do_play():
+    def _do_play() -> None:
         try:
             cmd = [part.replace("{path}", filepath) for part in player]
             if "{path}" not in " ".join(player):
