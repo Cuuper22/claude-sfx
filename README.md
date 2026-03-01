@@ -1,3 +1,13 @@
+## Why
+
+Terminals are silent by default. You stare at text, text stares back. I wanted my CLI sessions to have personality — a sound when something fails, a different sound when something works, a little whoosh while it’s thinking.
+
+The constraint I set: zero dependencies. Every sound is synthesized from scratch using `math.sin()`, `struct.pack()`, and `wave.open()`. The FAAH (error sound) is a descending sawtooth wave from 520Hz to 140Hz with increasing vibrato and soft clipping for that crunchy distortion feel. The ding is bell harmonics at A5 with an inharmonic 4.2x overtone — that’s what makes it sound like a bell instead of an organ pipe. The whoosh is seeded random noise through a moving-average filter whose width sweeps across the duration.
+
+Building audio synthesis from sine waves teaches you things about sound that no library can. Why does a bell sound different from an organ? Inharmonic overtone ratios. Why does a descending tone feel dramatic? The human ear tracks frequency sweeps as urgency signals. Why does filtered noise sound like wind? Because wind literally is filtered noise.
+
+All sounds play in background threads, so they never block your shell. Cross-platform audio detection (macOS `afplay`, Linux `pw-play`/`paplay`/`aplay`, Windows `SoundPlayer`) with terminal bell fallback.
+
 # claude-sfx
 
 Meme sound effects for your CLI sessions. Zero dependencies, pure Python stdlib.
