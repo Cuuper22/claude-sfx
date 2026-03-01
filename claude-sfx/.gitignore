@@ -1,7 +1,45 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
 *.egg-info/
 dist/
 build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+
+# Generated sounds
 sounds/*.wav
 !sounds/.gitkeep
+
+# Config (user-specific)
+.claude-sfx/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json

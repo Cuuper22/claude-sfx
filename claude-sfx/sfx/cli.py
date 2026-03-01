@@ -13,12 +13,19 @@ Usage:
     claude-sfx install-hooks     # print Claude Code hook configs
 """
 
+from typing import List, Optional, Dict, Any
 import json
 import sys
 import time
 
 
-def main(args: list[str] | None = None):
+def main(args: Optional[List[str]] = None) -> None:
+    """
+    Main CLI entry point.
+
+    Args:
+        args: Command-line arguments (defaults to sys.argv[1:]).
+    """
     if args is None:
         args = sys.argv[1:]
 
@@ -33,7 +40,7 @@ def main(args: list[str] | None = None):
         print("generating sounds...")
         paths = generate_all(force="--force" in args)
         for name, path in paths.items():
-            print(f"  {name:8s} → {path}")
+            print(f"  {name:8s} -> {path}")
         print("done.")
 
     elif cmd == "play":
@@ -51,7 +58,7 @@ def main(args: list[str] | None = None):
         from sfx.generator import SOUND_NAMES
         print("playing all sounds:\n")
         for name in SOUND_NAMES:
-            print(f"  > {name}...", end=" ", flush=True)
+            print(f"  * {name}...", end=" ", flush=True)
             play(name, blocking=True)
             print("done")
             time.sleep(0.3)
@@ -90,15 +97,34 @@ def main(args: list[str] | None = None):
         print("run 'claude-sfx help' for usage")
 
 
-def _print_hook_config():
-    """Print the Claude Code hooks configuration."""
-    print("Copy the hooks configuration from:\n")
-    print("  hooks/claude_code_settings.json\n")
-    print("Add it to your ~/.claude/settings.json file.\n")
-    print("The hooks will play:")
-    print("  - faah.wav on Bash errors")
-    print("  - yay.wav on Bash success")
-    print("  - ding.wav on prompts/notifications")
+def _print_hook_config() -> None:
+    """Print the Claude Code hooks configuration for user to paste."""
+    hooks: Dict[str, Any] = {
+        "hooks": {
+            "Bash": [
+                {
+                    "matcher": "exit_code != 0",
+                    "event": "on_error",
+                    "command": "python3 -m sfx.cli trigger error"
+                }
+            ],
+            "AskUserQuestion": [
+                {
+                    "event": "on_invoke",
+                    "command": "python3 -m sfx.cli trigger prompt"
+                }
+            ],
+            "TaskComplete": [
+                {
+                    "event": "on_complete",
+                    "command": "python3 -m sfx.cli trigger completion"
+                }
+            ]
+        }
+    }
+    print("add this to your ~/.claude/settings.json:\n")
+    print(json.dumps(hooks, indent=2))
+    print("\nor see hooks/ directory for ready-made hook scripts.")
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ Generates short meme-inspired sound effects as .wav files using
 nothing but the stdlib `wave` + `struct` modules.
 """
 
+from typing import List, Dict, Callable
 import math
 import os
 import random
@@ -17,12 +18,23 @@ SOUNDS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "sounds")
 SOUND_NAMES = ["faah", "ding", "yay", "bruh", "whoosh"]
 
 
-def _ensure_dir():
+def _ensure_dir() -> None:
+    """Ensure the sounds directory exists."""
     os.makedirs(SOUNDS_DIR, exist_ok=True)
 
 
-def _write_wav(filename: str, samples: list[int], sample_rate: int = SAMPLE_RATE):
-    """Write raw 16-bit mono PCM samples to a .wav file."""
+def _write_wav(filename: str, samples: List[int], sample_rate: int = SAMPLE_RATE) -> str:
+    """
+    Write raw 16-bit mono PCM samples to a .wav file.
+
+    Args:
+        filename: Name of the output file.
+        samples: List of 16-bit PCM sample values.
+        sample_rate: Sample rate in Hz.
+
+    Returns:
+        Path to the written file.
+    """
     _ensure_dir()
 
     # Apply volume scaling from config
@@ -43,8 +55,18 @@ def _write_wav(filename: str, samples: list[int], sample_rate: int = SAMPLE_RATE
     return path
 
 
-def _fade(samples: list[int], fade_in: int = 200, fade_out: int = 800) -> list[int]:
-    """Apply fade-in / fade-out to avoid clicks."""
+def _fade(samples: List[int], fade_in: int = 200, fade_out: int = 800) -> List[int]:
+    """
+    Apply fade-in and fade-out to samples to avoid clicks.
+
+    Args:
+        samples: List of PCM samples to modify in-place.
+        fade_in: Number of samples for fade-in.
+        fade_out: Number of samples for fade-out.
+
+    Returns:
+        Modified samples list.
+    """
     n = len(samples)
     for i in range(min(fade_in, n)):
         samples[i] = int(samples[i] * (i / fade_in))
@@ -257,9 +279,17 @@ _GENERATORS = {
 }
 
 
-def generate_all(force: bool = False) -> dict[str, str]:
-    """Generate all built-in sounds. Returns {name: filepath}."""
-    paths = {}
+def generate_all(force: bool = False) -> Dict[str, str]:
+    """
+    Generate all built-in sounds.
+
+    Args:
+        force: If True, regenerate even if files already exist.
+
+    Returns:
+        Dictionary mapping sound names to file paths.
+    """
+    paths: Dict[str, str] = {}
     for name, gen_fn in _GENERATORS.items():
         path = os.path.join(SOUNDS_DIR, f"{name}.wav")
         if force or not os.path.exists(path):
@@ -270,7 +300,18 @@ def generate_all(force: bool = False) -> dict[str, str]:
 
 
 def get_sound_path(name: str) -> str:
-    """Get path to a sound file, generating it if needed."""
+    """
+    Get path to a sound file, generating it if needed.
+
+    Args:
+        name: Name of the sound (e.g., 'faah', 'ding').
+
+    Returns:
+        Path to the sound file.
+
+    Raises:
+        FileNotFoundError: If the sound name is not recognized.
+    """
     path = os.path.join(SOUNDS_DIR, f"{name}.wav")
     if not os.path.exists(path):
         if name in _GENERATORS:

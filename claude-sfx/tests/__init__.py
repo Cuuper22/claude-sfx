@@ -1,1 +1,1 @@
-# tests package
+"""Tests for claude-sfx."""

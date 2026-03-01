@@ -5,6 +5,7 @@ Settings live in ~/.claude-sfx/settings.json (or a custom path).
 Lightweight, human-editable JSON.
 """
 
+from typing import Dict, Optional, Any
 import json
 import os
 
@@ -29,15 +30,21 @@ DEFAULT_CONFIG = {
 
 
 def _config_path() -> str:
+    """Get the configuration file path from environment or use default."""
     return os.environ.get("CLAUDE_SFX_CONFIG", DEFAULT_CONFIG_PATH)
 
 
-def load_config() -> dict:
-    """Load config from disk, falling back to defaults."""
+def load_config() -> Dict[str, Any]:
+    """
+    Load configuration from disk, falling back to defaults.
+
+    Returns:
+        Dictionary containing the merged configuration.
+    """
     path = _config_path()
     if os.path.isfile(path):
         try:
-            with open(path) as f:
+            with open(path, encoding="utf-8") as f:
                 user_cfg = json.load(f)
             # merge with defaults so new keys are always present
             merged = {**DEFAULT_CONFIG, **user_cfg}
@@ -52,17 +59,33 @@ def load_config() -> dict:
     return dict(DEFAULT_CONFIG)
 
 
-def save_config(config: dict) -> str:
-    """Save config to disk. Returns the file path."""
+def save_config(config: Dict[str, Any]) -> str:
+    """
+    Save configuration to disk.
+
+    Args:
+        config: Configuration dictionary to save.
+
+    Returns:
+        The file path where config was saved.
+    """
     path = _config_path()
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2)
     return path
 
 
-def toggle(on: bool | None = None) -> bool:
-    """Toggle sounds on/off. Returns the new state."""
+def toggle(on: Optional[bool] = None) -> bool:
+    """
+    Toggle sounds on/off.
+
+    Args:
+        on: True to enable, False to disable, None to toggle current state.
+
+    Returns:
+        The new enabled state.
+    """
     cfg = load_config()
     if on is None:
         cfg["enabled"] = not cfg["enabled"]
@@ -73,14 +96,26 @@ def toggle(on: bool | None = None) -> bool:
 
 
 def is_enabled() -> bool:
+    """
+    Check if sounds are currently enabled.
+
+    Returns:
+        True if enabled, False otherwise.
+    """
     return load_config().get("enabled", True)
 
 
-def get_sound_for_event(event: str) -> str | None:
+def get_sound_for_event(event: str) -> Optional[str]:
     """
     Resolve which sound to play for a given event.
+
     Checks custom_sounds first, then built-in mappings.
-    Returns a sound name (like 'faah') or a file path.
+
+    Args:
+        event: Event name (e.g., 'error', 'prompt').
+
+    Returns:
+        Sound name (like 'faah') or file path, or None if not found.
     """
     cfg = load_config()
     # custom path takes priority
