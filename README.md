@@ -1,7 +1,3 @@
-## Why
-
-Terminals are silent and soulless. Now mine goes "FAAAH" when something breaks and "yay" when a task completes. Pure Python, zero dependencies, synthesized from sine waves.
-
 # claude-sfx
 
 Meme sound effects for your CLI sessions. Zero dependencies, pure Python stdlib.
