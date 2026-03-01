@@ -32,9 +32,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Cuuper22/Osint_app"
-Repository = "https://github.com/Cuuper22/Osint_app"
-Issues = "https://github.com/Cuuper22/Osint_app/issues"
+Homepage = "https://github.com/Cuuper22/claude-sfx"
+Repository = "https://github.com/Cuuper22/claude-sfx"
+Issues = "https://github.com/Cuuper22/claude-sfx/issues"
 
 [project.optional-dependencies]
 dev = [

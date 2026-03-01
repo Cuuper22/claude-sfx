@@ -25,7 +25,7 @@ pip install claude-sfx
 ### From Source
 
 ```bash
-git clone https://github.com/Cuuper22/Osint_app.git
+git clone https://github.com/Cuuper22/claude-sfx.git
 cd Osint_app/claude-sfx
 pip install -e .
 ```
@@ -145,7 +145,7 @@ Sounds play in background threads so they never block your CLI.
 
 ```bash
 # Clone the repository
-git clone https://github.com/Cuuper22/Osint_app.git
+git clone https://github.com/Cuuper22/claude-sfx.git
 cd Osint_app/claude-sfx
 
 # Install in editable mode
@@ -162,6 +162,3 @@ python demo.py
 
 MIT License - see LICENSE file for details
 
-## About the Name
-
-This repo is called "Osint_app" for historical reasons. The actual project is **claude-sfx**. OSINT features may be added in the future.
